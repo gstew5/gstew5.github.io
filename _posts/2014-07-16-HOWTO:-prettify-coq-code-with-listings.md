@@ -73,7 +73,7 @@ $math$
 \end{lstlisting}
 ```
 
-### Centering Listings
+### Centered Listings
 Finally, one hack to horizontally center listings is:
 
 ``` latex
