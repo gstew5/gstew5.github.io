@@ -8,10 +8,13 @@ published: True
 
 ### Proportional Fonts
 First, use a sans serif, proportional font, by setting
+
 ``` latex
 basicstyle=\sffamily\singlespacing
 ```
+
 and 
+
 ``` latex
 columns=fullflexible.
 ```
