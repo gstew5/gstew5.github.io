@@ -85,7 +85,7 @@ Finally, one hack to horizontally center listings is:
 code
 \end{lstlisting}
 \end{tabular}
-\end{center
+\end{center}
 ```
 
 There must be a better way, but I haven't found it yet.
