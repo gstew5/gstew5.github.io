@@ -6,7 +6,8 @@ published: False
 
 [Listings](http://www.ctan.org/pkg/listings) makes typesetting code easy. The following are some (personal) tips for producing pretty listings for Coq. I'm recording them here mainly as a reminder to my future self.
 
-## First, use a sans serif, proportional font, by setting
+### Proportional Fonts
+First, use a sans serif, proportional font, by setting
 ```
 basicstyle=\sffamily\singlespacing
 ```
@@ -23,7 +24,8 @@ The \singlespacing ensures that code listings are single spaced, even in the con
 ```
 Another option is to use memoir's built-in setspace package (which includes some enhancements, apparently), but I haven't tried this.
 
-## Second, color keywords. MidnightBlue is nice.
+### Colored Keywords
+Second, color keywords. MidnightBlue is nice.
 ```
 keywordstyle=\bfseries\color{MidnightBlue}
 ```
@@ -37,7 +39,8 @@ If you end up using a monospaced font, then you may need
 ```
 to enable bolding.
 
-## Third, use literate symbols (sparingly). 
+### Literate Symbols
+Third, use literate symbols (sparingly). 
 ```
 literate=
   {:=}{{$\defeq\;$}}1
@@ -47,14 +50,16 @@ literate=
 ```
 For common symbols like ->, =>, etc., this makes code easier to read. But be careful of overruse (which can obscure). A disadvantage is, you can no longer paste code verbatim from the pdf into an editor.
 
-## Fourth, mathescape is very handy: 
+### mathescape
+Fourth, mathescape is very handy: 
 ```
 \begin{lstlisting}[mathescape]
 $math$
 \end{lstlisting}
 ```
 
-## Finally, one hack to horizontally center listings is:
+### Centering Listings
+Finally, one hack to horizontally center listings is:
 ```
 \begin{center}
 \begin{tabular}{c}
