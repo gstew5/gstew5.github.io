@@ -1,7 +1,7 @@
 ---
 layout: post
 title: HOWTO Prettify Coq Code with Listings
-published: False
+published: True
 ---
 
 [Listings](http://www.ctan.org/pkg/listings) makes typesetting code easy. The following are some (personal) tips for producing pretty listings for Coq. I'm recording them here mainly as a reminder to my future self.
