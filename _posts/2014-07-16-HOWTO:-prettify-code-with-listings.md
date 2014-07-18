@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HOWTO Prettify Coq Code with Listings
+title: HOWTO: Prettify Coq Code with Listings
 published: True
 ---
 
@@ -8,17 +8,17 @@ published: True
 
 ### Proportional Fonts
 First, use a sans serif, proportional font, by setting
-```
+``` latex
 basicstyle=\sffamily\singlespacing
 ```
 and 
-```
+``` latex
 columns=fullflexible.
 ```
 For code in C, assembly, etc., I usually use monospaced fonts. But the Coq code I include in my thesis is almost like pseudocode, and proportional fonts are just easier to read.
 
 The \singlespacing ensures that code listings are single spaced, even in the context of a double-spaced document like a thesis. If you're using the memoir class, then you can re-enable the standard setspace package with:
-```
+``` latex
 \DisemulatePackage{setspace}
 \usepackage{setspace}
 ```
@@ -26,22 +26,22 @@ Another option is to use memoir's built-in setspace package (which includes some
 
 ### Colored Keywords
 Second, color keywords. MidnightBlue is nice.
-```
+``` latex
 keywordstyle=\bfseries\color{MidnightBlue}
 ```
 I import the color package with these options:
-```
+``` latex
 \usepackage[usenames,dvipsnames]{color}
 ```
 If you end up using a monospaced font, then you may need
-```
+``` latex
 \renewcommand{\ttdefault}{pcr}
 ```
 to enable bolding.
 
 ### Literate Symbols
 Third, use literate symbols (sparingly). 
-```
+``` latex
 literate=
   {:=}{{$\defeq\;$}}1
   {->}{{$\rightarrow\;$}}1
@@ -52,7 +52,7 @@ For common symbols like ->, =>, etc., this makes code easier to read. But be car
 
 ### mathescape
 Fourth, mathescape is very handy: 
-```
+``` latex
 \begin{lstlisting}[mathescape]
 $math$
 \end{lstlisting}
@@ -60,7 +60,7 @@ $math$
 
 ### Centering Listings
 Finally, one hack to horizontally center listings is:
-```
+``` latex
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}
