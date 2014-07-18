@@ -54,13 +54,13 @@ to enable bolding.
 ### Literate Symbols
 Third, use literate symbols (sparingly). 
 
-``` latex
+{% highlight latex %}
 literate=
   {:=}{{$\defeq\;$}}1
   {->}{{$\rightarrow\;$}}1
   {=>}{{$\Rightarrow\;$}}1
   ...
-```
+{% endhighlight latex %}
 
 For common symbols like ->, =>, etc., this makes code easier to read. But be careful of overruse (which can obscure). A disadvantage is, you can no longer paste code verbatim from the pdf into an editor.
 
