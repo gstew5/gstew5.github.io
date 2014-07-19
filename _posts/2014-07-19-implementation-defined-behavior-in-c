@@ -32,13 +32,32 @@ Implementation-defined:
 * ... and many more ... (J.3)
 
 Unspecified:
-* 
+* the order in which subexpressions are evaluated (and the order in which any resulting side-effects occur) in function calls, evaluation of &&, ||, ?:, and comma operators
+* the order in which # and ## operations are evaluated during preprocessing
+* ... and many more ... (J.1)
 
+### Integer-Pointer Conversions
 
+The most interesting kind of implementation-defined behavior, from my perspective, is conversion between (void, nonnull) pointers and integers, via explicit casts as in the program below:
 
+``` C
+#include <stddef.h>
 
+int g(int* x) {
+  return ((uintptr_t)x <= 0xbffff980);
+}
 
+static inline int f(void) {
+  int a = 0;
+  return g(&a);
+}
 
+int main(void) {
+  return f();
+}
+```
+
+When we're (mentally) computing the effect of some piece of C code, as it would execute in the C abstract machine, think of unspecified behavior as _nondeterministic_ (we need to consider all possibilities) and 
 
 If we want to treat these programs as portable C codes, and (mentally) compute their behavior just from the standard (i.e., without reference to any particular compiler), what do we do when try to compute the result of one of these integer--pointer conversions?
 
