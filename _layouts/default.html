@@ -19,7 +19,7 @@
       {{ content }}
       
       {% for post in sites.post limit:1 %}
-        If you want to comment, you can do so <a href="{{post.url}}">here.</a>
+        If you want to comment, you can do so <a href="{{ post.url }}">here.</a>
       {% endfor %}
       
       <div class="footer">
