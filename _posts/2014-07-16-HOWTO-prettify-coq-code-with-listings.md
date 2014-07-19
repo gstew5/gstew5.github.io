@@ -1,6 +1,7 @@
 ---
 layout: post
-title: HOWTO: Prettify Coq Code with Listings
+title: HOWTO Prettify Coq Code with Listings
+tags: latex howto coq
 published: True
 ---
 
