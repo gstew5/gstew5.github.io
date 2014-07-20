@@ -36,26 +36,39 @@ Unspecified:
 * the order in which # and ## operations are evaluated during preprocessing
 * ... and many more ... (J.1)
 
-### Integer-Pointer Conversions
+### The Problem with Implementation-defined Behavior
 
-The most interesting kind of implementation-defined behavior, from my perspective, is conversion between (void, nonnull) pointers and integers, via explicit casts as in the program below:
+The most interesting kind of implementation-defined behavior, from my perspective, is conversion between (void, nonnull) pointers and integers, via explicit casts:
 
 ``` C
 #include <stddef.h>
 
-int g(int* x) {
-  return ((uintptr_t)x <= 0xbffff980);
-}
+int g(int* x) { return ((uintptr_t)x <= 0xbffff980); }
 
 static inline int f(void) {
   int a = 0;
   return g(&a);
 }
 
-int main(void) {
-  return f();
-}
+int main(void) {  return f(); }
 ```
+
+What integer does this program return? 
+
+If we trace through the program, we pretty quickly get to the key bit:
+
+``` C
+return ((uintptr_t)x <= 0xbffff980)
+```
+
+Compare the address x (when viewed as an unsigned integer) less than or equal to a (craftily chosen) integer constant. 
+
+The C standard says that the result of the conversion (uintptr_t)x---where uintptr_t is an unsigned integer type guaranteed not to screw up the conversion---is implementation defined. 
+
+So we should think of (uintptr_t)x 
+
+But implementation-defined behavior is supposed to be documented by conforming C compilers, so 
+
 
 When we're (mentally) computing the effect of some piece of C code, as it would execute in the C abstract machine, think of unspecified behavior as _nondeterministic_ (we need to consider all possibilities) and 
 
