@@ -42,7 +42,26 @@ The most interesting kind of implementation-defined behavior, from my perspectiv
 
 To illustrate how things can go wrong, consider the following C program. I believe this program is well-defined according to the C standard, but please correct me if I'm wrong!
 
+```C
+#include <stdint.h>
 
+int g(int* x) { return (uintptr_t)(void*)x <= 0xbffff980; }
+
+static int f(void) {
+  int a = 0;
+  return g(&a);
+}
+
+int main(void) {  return f(); }
+```
+
+What integer does this program return? 
+
+If we do a mental trace, we pretty quickly get to the key bit:
+
+```C
+return (uintptr_t)(void*)x <= 0xbffff980;
+```
 
 The first cast to `void*` is always well-defined.
 The comparison checks whether the address `x` (when viewed as an unsigned integer) is less than or equal to a particular integer constant. `uintptr_t` is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.
