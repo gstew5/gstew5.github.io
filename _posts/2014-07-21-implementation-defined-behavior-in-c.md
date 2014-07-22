@@ -28,7 +28,7 @@ Here are some examples:
 
 ### Unspecified Behavior 
 
-"Unspecified behavior" (3.4.4), in turn, is behavior that either has two or more possible well-specified outcomes, or involves the use of an "unspecified value," which is any valid value of the relevant type (int, float, etc.). 
+"Unspecified behavior" (3.4.4), in turn, is behavior that either has two or more possible outcomes, or involves the use of an "unspecified value," which is any valid value of the relevant type (int, float, etc.). 
 
 All of the following are unspecified:
 
@@ -129,7 +129,7 @@ Stuck subexpression: <ptr> <= -1073743488
 ERROR: Undefined behavior
 ```
 
-The `ERROR: Undefined behavior` indicates that the CompCert C semantics got stuck when attempting to execute the pointer-integer cast `(uintptr_t)x` in g.
+The `ERROR: Undefined behavior` indicates that the CompCert C semantics got stuck when attempting to execute the pointer-integer cast `(uintptr_t)x` in `g`.
 
 If you read the CompCert C semantics, you see that the cast to `uintptr_t` leaves the pointer a pointer (it's classified as a "neutral" cast by CompCert). The comparison, between the pointer and integer, then gets stuck.
 
