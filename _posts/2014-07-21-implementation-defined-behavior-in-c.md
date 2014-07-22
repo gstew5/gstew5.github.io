@@ -114,7 +114,7 @@ Here we've uncovered a second source of unspecified, or nondeterministic, behavi
 While I was at it, I thought I'd compile the program above with [CompCert](http://compcert.inria.fr), just to see what happens.
 CompCert, if you haven't seen it before, is a verified compiler for a large subset of C, written and proved correct in the Coq theorem prover. The CompCert distribution includes both the compiler (with correctness proof) and an executable C interpreter.
 
-Compiling the program above with CompCert results in the same behavior (different return values, depending on whether f is inlined or not). To get CompCert to inline f, I had to explicitly add the inline function specifier.
+Compiling the program above with CompCert results in the same behavior (different return values, depending on whether `f` is inlined or not). To get CompCert to inline `f`, I had to explicitly add the `inline` function specifier.
 
 More interesting is what happens when you "run" the program above using CompCert's C interpreter `ccomp -interp`:
 
