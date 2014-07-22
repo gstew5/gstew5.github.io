@@ -133,5 +133,5 @@ The `ERROR: Undefined behavior` indicates that the CompCert C semantics got stuc
 
 If you read the CompCert C semantics, you see that the cast to `uintptr_t` leaves the pointer a pointer (it's classified as a "neutral" cast by CompCert). The comparison, between the pointer and integer, then gets stuck.
 
-The question I'm left with: Is getting stuck at this point a valid "unspecified behavior"? :-)
+The question I'm left with: Is getting stuck at this point a valid "unspecified behavior"?
 
