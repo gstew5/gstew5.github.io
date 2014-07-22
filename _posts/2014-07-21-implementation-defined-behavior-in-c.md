@@ -44,8 +44,6 @@ To illustrate how things can go wrong, consider the following C program. I belie
 
 {% raw %}
 <pre>
-#include <stdint.h>
-
 int g(int* x) { return ((uintptr_t)(void*)x <= 0xbffff980); }
 
 static int f(void) {
