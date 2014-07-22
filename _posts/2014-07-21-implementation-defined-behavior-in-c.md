@@ -63,17 +63,6 @@ If we trace through the program, we pretty quickly get to the key bit:
 return ((uintptr_t)(void*)x <= 0xbffff980)
 ```
 
-The first cast to `void*` is always well-defined.
-The comparison checks whether the address `x` (when viewed as an unsigned integer) is less than or equal to a particular integer constant. `uintptr_t` is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.
-
-Let's assume for a moment that we're trying to determine the result without reference to any particular compiler. This is actually a very reasonable thing to do---many C verification and bugfinding tools don't assume a particular compiler, for example.
-
-The C standard says that the result of the conversion `(uintptr_t)x` is implementation defined. I.e., "The operation has unspecified behavior, where each implementation documents how the choice is made." 
-
-We're not assuming any particular implementation, so the result of the conversion must just be unspecified. If we want to treat the code as truly portable, we need to consider all possible implementations of pointer-to-integer casts.
-
-Which means that `(uintptr_t)x` is a well-defined but arbitrary valid unsigned integer (that is, any unsigned integer representable as a `uintptr_t`). All we can say, then, about the less-than-or-equal-to comparison is that it is either 0 or 1, but we don't know which. The program is nondeterministic.
-
 ### gcc
 
 Things get a bit weirder if we start thinking about the behavior of the program above with reference to a particular C implementation, e.g., gcc, clang, or CompCert.
