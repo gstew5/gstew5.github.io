@@ -2,7 +2,7 @@
 layout: post
 title: Implementation-defined Behavior in C
 tags: C semantics
-published: False
+published: True
 ---
 
 I've become interested recently in how we should think (and reason formally!) about C programs that perform implementation-defined operations (in particular, conversions between nonnull pointers and integers). 
