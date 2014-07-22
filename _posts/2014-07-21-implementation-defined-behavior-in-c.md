@@ -40,7 +40,7 @@ All of the following are unspecified:
 
 The most interesting kind of implementation-defined behavior, from my perspective, is conversion between (void, nonnull) pointers and integers. These kinds of conversions can be legitimately useful in some situations (consider tagged pointers in GCs). On the other hand, they can also quickly degenerate.
 
-To illustrate how things can go wrong, consider the following C program. I believe this program is well-defined according to the C standard, but please correct me if I'm wrong!
+To illustrate how things can get messy, consider the following C program. I believe this program is well-defined according to the C standard, but please correct me if I'm wrong!
 
 {% raw %}
 <pre>
@@ -65,15 +65,12 @@ return ((uintptr_t)(void*)x <= 0xbffff980);
 </pre>
 {% endraw %}
 
+* The first cast to `void*` is always well-defined.
+* `uintptr_t` is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.)
+* The conversion `(uintptr_t)x`, on the other hand, is only implementation defined. Quoting from the standard again, "The operation has unspecified behavior, where each implementation documents how the choice is made." 
 
-The first cast to `void*` is always well-defined.
-The comparison checks whether the address `x` (when viewed as an unsigned integer) is less than or equal to a particular integer constant. `uintptr_t` is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.
-
-Let's assume for a moment that we're trying to determine the result without reference to any particular compiler. This is actually a very reasonable thing to do---many C verification and bugfinding tools don't assume a particular compiler, for example.
-
-The C standard says that the result of the conversion `(uintptr_t)x` is implementation defined. I.e., "The operation has unspecified behavior, where each implementation documents how the choice is made." 
-
-We're not assuming any particular implementation, so the result of the conversion must just be unspecified. If we want to treat the code as truly portable, we need to consider all possible implementations of pointer-to-integer casts.
+Let's assume for a moment that we're trying to determine the result without reference to any particular compiler.
+The result of the conversion must just be unspecified, right? (If we want to treat the code as truly portable, we need to consider all possible implementations of pointer-to-integer casts.)
 
 Which means that `(uintptr_t)x` is a well-defined but arbitrary valid unsigned integer (that is, any unsigned integer representable as a `uintptr_t`). All we can say, then, about the less-than-or-equal-to comparison is that it is either 0 or 1, but we don't know which. The program is nondeterministic.
 
