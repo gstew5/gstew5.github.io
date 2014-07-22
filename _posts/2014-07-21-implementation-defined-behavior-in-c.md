@@ -107,7 +107,7 @@ What's going on?
 In the second compilation, gcc inlines function `f` at `f`'s callsite in `main`. Inlining, in turn, changes the absolute position on the stack at which local variable `a` is allocated, which causes the less-than-or-equal comparison to switch from `1` to `0`. 
 (To see this behavior on your own platform, you'll probably have to choose the integer `0xbffff980` a bit craftily, and turn address-space randomization off.)
 
-Here we've uncovered a second source of unspecified, or nondeterministic, behavior in the program above. Although the cast is now guaranteed to produce a well-defined result, there's no reason we should assume that variable a is allocated at any particular location in memory. The C standard guarantees that the address of an object remains constant only during the _lifetime_ of the object, not across program executions (6.2.4, footnote 33).
+Here we've uncovered a second source of unspecified, or nondeterministic, behavior in the program above. Although the cast is now guaranteed to produce a well-defined result, there's no reason we should assume that `a` is allocated at any particular location in memory. The C standard guarantees that the address of an object remains constant only during the _lifetime_ of the object, not across program executions (6.2.4, footnote 33).
 
 ### CompCert
 
