@@ -61,44 +61,46 @@ If we trace through the program, we pretty quickly get to the key bit:
 return ((uintptr_t)(void*)x <= 0xbffff980)
 ```
 
-The first cast to `void*` is always well-defined; the behavior of the second cast is defined by the implementation (compiler).
-The comparison checks whether the address x (when viewed as an unsigned integer) less than or equal to a particular integer constant. uintptr_t is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.
+The first cast to `void*` is always well-defined.
+The comparison checks whether the address `x` (when viewed as an unsigned integer) less than or equal to a particular integer constant. `uintptr_t` is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.
 
 Let's assume for a moment that we're trying to determine the result without reference to any particular compiler. This is actually a very reasonable thing to do---many C verification and bugfinding tools don't assume a particular compiler, for example.
 
-The C standard says that the result of the conversion (uintptr_t)x is implementation defined. I.e., "The operation has unspecified behavior, where each implementation documents how the choice is made." 
+The C standard says that the result of the conversion `(uintptr_t)x` is implementation defined. I.e., "The operation has unspecified behavior, where each implementation documents how the choice is made." 
 
-We're not assuming any particular implementation, so the result of the conversion must just be unspecified. (If we want to treat the code as truly portable, we need to consider all possible implementations of pointer-to-integer casts.)
+We're not assuming any particular implementation, so the result of the conversion must just be unspecified. If we want to treat the code as truly portable, we need to consider all possible implementations of pointer-to-integer casts.
 
-Which means that (uintptr_t)x is a well-defined but arbitrary valid unsigned integer (that is, any unsigned integer representable as a uintptr_t). All we can say, then, about the less-than-or-equal-to comparison is that it is either 0 or 1 (but we don't know which). The program is nondeterministic.
+Which means that `(uintptr_t)x` is a well-defined but arbitrary valid unsigned integer (that is, any unsigned integer representable as a `uintptr_t`). All we can say, then, about the less-than-or-equal-to comparison is that it is either 0 or 1, but we don't know which. The program is nondeterministic.
 
-### The Problem with Implementation-defined Behavior
+### gcc
 
 Things get a bit weirder if we start thinking about the behavior of the program above with reference to a particular C implementation, e.g., gcc, clang, or CompCert.
 
 gcc, for example, documents pointer-to-integer casts as follows:
 
-> asdasda
-> asdasd
-> asdasdasdasd
+> A cast from pointer to integer discards most-significant bits if the pointer representation is larger than the integer type, sign-extends(2) if the pointer representation is smaller than the integer type, otherwise the bits are unchanged. 
 
-If we assume gcc, we should assume that pointer->integer casts have the behavior above. This should at least resolve the nondeterminism we saw above, right? (Because we're fixing a particular implementation.)
+If we assume gcc, we should assume that pointer-integer casts have the behavior above. This should at least resolve the nondeterminism we saw above, right? (Because we're fixing a particular implementation.)
 
 We can experiment by compiling the program, running it, and checking its exit code. 
 
 When compiled without optimizations, I get exit code 1 on my machine.
 
-> gcc -O0 f.c
-> ./a.out
-> echo $?
-> 1
+```  
+gcc -O0 f.c
+./a.out
+echo $?
+1
+```
 
 When compiled with optimizations turned on, I get exit code 0.
 
-> gcc -O3 f.c
-> ./a.out
-> echo $?
-> 0
+``` 
+gcc -O3 f.c
+./a.out
+echo $?
+0
+```
 
 What's going on?
 In the second compilation, gcc inlines function f at f's callsite in main. Inlining, in turn, changes the absolute position on the stack at which local variable a is allocated, which causes the less-than-or-equal comparison to switch from 1 to 0. 
@@ -113,19 +115,17 @@ CompCert, if you haven't seen it before, is a verified compiler for a large subs
 
 Compiling the program above with CompCert results in the same behavior (different return values, depending on whether f is inlined or not). To get CompCert to inline f, I had to explicitly add the inline function specifier.
 
-More interesting is what happens when you "run" the program above using CompCert's C interpreter (ccomp -interp):
+More interesting is what happens when you "run" the program above using CompCert's C interpreter `ccomp -interp`:
 
+```
 Stuck state: in function g, expression <ptr> <= -1073743488
 Stuck subexpression: <ptr> <= -1073743488
 ERROR: Undefined behavior
-
-The ERROR: Undefined behavior indicates that the CompCert C semantics got stuck when attempting to execute the pointer->integer (uintptr_t)x cast in g:
-
-``` C
-return ((uintptr_t)(void*)x <= 0xbffff980);
 ```
 
-If you read the CompCert C semantics, you see that the cast to uintptr_t leaves the pointer a pointer (it's classified as a "neutral cast" by CompCert). The comparison, between the pointer and integer, then gets stuck.
+The `ERROR: Undefined behavior` indicates that the CompCert C semantics got stuck when attempting to execute the pointer-integer cast `(uintptr_t)x` in g.
+
+If you read the CompCert C semantics, you see that the cast to `uintptr_t` leaves the pointer a pointer (it's classified as a "neutral cast" by CompCert). The comparison, between the pointer and integer, then gets stuck.
 
 A question I have is: Is getting stuck at this point is a valid "unspecified behavior"?
 
