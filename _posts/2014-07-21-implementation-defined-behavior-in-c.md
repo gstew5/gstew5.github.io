@@ -5,7 +5,7 @@ tags: C semantics
 published: false
 ---
 
-I've become interested recently in how we should think (and reason) about C programs that perform implementation-defined operations (in particular, conversions between nonnull pointers and integers). 
+I've become interested recently in how we should think (and reason) about C programs that perform implementation-defined operations, in particular, conversions between nonnull pointers and integers. 
 
 Mostly, this is just idle curiosity on my part. 
 
@@ -27,7 +27,7 @@ Here are some examples:
 
 ### Unspecified Behavior 
 
-"Unspecified behavior" (3.4.4), in turn, is behavior that either has two or more possible (well-specified) outcomes, or involves the use of an "unspecified value," which is any valid value of the relevant type (int, float, etc.). 
+"Unspecified behavior" (3.4.4), in turn, is behavior that either has two or more possible well-specified outcomes, or involves the use of an "unspecified value," which is any valid value of the relevant type (int, float, etc.). 
 
 All of the following are unspecified:
 * the order in which subexpressions are evaluated (and the order in which any resulting side-effects occur) in function calls, evaluation of &&, ||, ?:, and comma operators
@@ -53,8 +53,6 @@ static int f(void) {
 int main(void) {  return f(); }
 ```
 
-main calls f(), which calls g(&a), passing the address of local variable a as argument.
-
 What integer does this program return? 
 
 If we trace through the program, we pretty quickly get to the key bit:
@@ -63,7 +61,7 @@ If we trace through the program, we pretty quickly get to the key bit:
 return ((uintptr_t)(void*)x <= 0xbffff980)
 ```
 
-The first cast to (void*) is always well-defined; the behavior of the second cast is defined by the implementation (compiler).
+The first cast to `void*` is always well-defined; the behavior of the second cast is defined by the implementation (compiler).
 The comparison checks whether the address x (when viewed as an unsigned integer) less than or equal to a particular integer constant. uintptr_t is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.
 
 Let's assume for a moment that we're trying to determine the result without reference to any particular compiler. This is actually a very reasonable thing to do---many C verification and bugfinding tools don't assume a particular compiler, for example.
