@@ -10,7 +10,7 @@ title:            Gordon Stewart
 tagline:          
 url:              http://gstew5.github.io
 paginate:         1
-baseurl:          http://gstew5.github.io
+baseurl:          gstew5.github.io
 author:
   name:           Gordon Stewart
   url:            http://www.cs.princeton.edu/~jsseven
