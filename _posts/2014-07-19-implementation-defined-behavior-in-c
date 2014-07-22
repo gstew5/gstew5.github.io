@@ -106,30 +106,26 @@ What's going on?
 In the second compilation, gcc inlines function f at f's callsite in main. Inlining, in turn, changes the absolute position on the stack at which local variable a is allocated, which causes the less-than-or-equal comparison to switch from 1 to 0. 
 (To see this behavior on your own platform, you'll probably have to choose the integer 0xbffff980 a bit craftily, and turn address-space randomization off.)
 
-Here we've uncovered a second source of unspecified, or nondeterministic, behavior in the program above. Although the cast is now guaranteed to produce a well-defined result, there's no reason we should assume that variable a is allocated at any particular location in memory. The C standard guarantees that the address of an object remains constant only during the lifetime of the object, not across program executions (6.2.4, footnote 33).
+Here we've uncovered a second source of unspecified, or nondeterministic, behavior in the program above. Although the cast is now guaranteed to produce a well-defined result, there's no reason we should assume that variable a is allocated at any particular location in memory. The C standard guarantees that the address of an object remains constant only during the _lifetime_ of the object, not across program executions (6.2.4, footnote 33).
 
 ### CompCert
 
 While I was at it, I thought I'd compile the program above with [CompCert](http://compcert.inria.fr), just to see what happens.
 CompCert, if you haven't seen it before, is a verified compiler for a large subset of C, written and proved correct in the Coq theorem prover. The CompCert distribution includes both the compiler (with correctness proof) and an executable C interpreter.
 
+Compiling the program above with CompCert results in the same behavior (different return values, depending on whether f is inlined or not). To get CompCert to inline f, I had to explicitly add the inline function specifier.
 
-
-If you run this in the CompCert C interpreter (ccomp -interp), you get:
+More interesting is what happens when you "run" the program above using CompCert's C interpreter (ccomp -interp):
 
 Stuck state: in function g, expression <ptr> <= -1073743488
 Stuck subexpression: <ptr> <= -1073743488
 ERROR: Undefined behavior
 
-at this point in g:
+The ERROR: Undefined behavior indicates that the CompCert C semantics got stuck when attempting to execute the pointer->integer (uintptr_t)x cast in g:
 
-  return ((unsigned int)x <= 0xbffff980);
+> return ((uintptr_t)(void*)x <= 0xbffff980);
 
-The cast to unsigned int leaves the Vptr a Vptr (because it's a neutral cast). The comparison then gets stuck.
+If you read the CompCert C semantics, you see that the cast to uintptr_t leaves the pointer a pointer (it's classified as a "neutral cast" by CompCert). The comparison, between the pointer and integer, then gets stuck.
 
-A question: Is getting stuck a valid unspecified behavior?
-
-(Incidentally, this program on my machine returns 0 or 1, depending on whether I tell CompCert to inline the function f :-))
-
-So, my thinking in general is that nonportable C code is just bad :-)
+A question I have is: Is getting stuck at this point is a valid "unspecified behavior"?
 
