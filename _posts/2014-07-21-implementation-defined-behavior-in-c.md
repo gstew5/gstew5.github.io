@@ -85,7 +85,7 @@ gcc, for example, documents pointer-to-integer casts as follows:
 
 > A cast from pointer to integer discards most-significant bits if the pointer representation is larger than the integer type, sign-extends(2) if the pointer representation is smaller than the integer type, otherwise the bits are unchanged. 
 
-If we assume gcc, we should assume that pointer-integer casts have the behavior above. This should at least resolve the nondeterminism we saw earlier, right? (Because we're fixing a particular implementation.)
+If we assume gcc, we should assume that pointer-integer casts have this behavior, which should at least resolve the nondeterminism we saw earlier, right? (Because we're fixing a particular implementation.)
 
 We can experiment by compiling the program, running it, and checking its exit code. 
 
@@ -131,7 +131,7 @@ ERROR: Undefined behavior
 
 The `ERROR: Undefined behavior` indicates that the CompCert C semantics got stuck when attempting to execute the pointer-integer cast `(uintptr_t)x` in g.
 
-If you read the CompCert C semantics, you see that the cast to `uintptr_t` leaves the pointer a pointer (it's classified as a "neutral cast" by CompCert). The comparison, between the pointer and integer, then gets stuck.
+If you read the CompCert C semantics, you see that the cast to `uintptr_t` leaves the pointer a pointer (it's classified as a "neutral" cast by CompCert). The comparison, between the pointer and integer, then gets stuck.
 
-Is getting stuck at this point is a valid "unspecified behavior"?
+Is getting stuck at this point a valid "unspecified behavior"? 
 
