@@ -17,7 +17,7 @@ First, definitions:
 
 The C11 standard defines "implementation-defined behavior" as 
 > unspecified behavior where each implementation documents how the choice is made.
-> (3.4.1, [http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf](C11 draft standard))
+> (3.4.1, [C11 draft standard](http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf))
 
 Here are some examples:
 * pointer-to-integer (and integer-to-pointer) conversions, whenever the pointer/integer is nonnull/nonzero
