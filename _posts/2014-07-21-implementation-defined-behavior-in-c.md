@@ -20,6 +20,7 @@ The C11 standard defines "implementation-defined behavior" as
 > (3.4.1, [C11 draft standard](http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf))
 
 Here are some examples:
+
 * pointer-to-integer (and integer-to-pointer) conversions, whenever the pointer/integer is nonnull/nonzero
 * representation of signed integers (two's complement, one's complement, etc.)
 * the extent to which the compiler respects the inline function specifier
@@ -30,6 +31,7 @@ Here are some examples:
 "Unspecified behavior" (3.4.4), in turn, is behavior that either has two or more possible well-specified outcomes, or involves the use of an "unspecified value," which is any valid value of the relevant type (int, float, etc.). 
 
 All of the following are unspecified:
+
 * the order in which subexpressions are evaluated (and the order in which any resulting side-effects occur) in function calls, evaluation of `&&`, `||`, `?:`, and comma operators
 * the order in which `#` and `##` operations are evaluated during preprocessing
 * ... and many more ... (J.1)
@@ -40,7 +42,7 @@ The most interesting kind of implementation-defined behavior, from my perspectiv
 
 To illustrate how things can go wrong, consider the following C program. I believe this program is well-defined according to the C standard, but please correct me if I'm wrong!
 
-``` C
+```C
 #include <stdint.h>
 
 int g(int* x) { return ((uintptr_t)(void*)x <= 0xbffff980); }
@@ -57,7 +59,7 @@ What integer does this program return?
 
 If we trace through the program, we pretty quickly get to the key bit:
 
-``` C
+```C
 return ((uintptr_t)(void*)x <= 0xbffff980)
 ```
 
