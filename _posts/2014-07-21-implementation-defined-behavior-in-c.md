@@ -24,7 +24,7 @@ Here are some examples:
 * pointer-to-integer (and integer-to-pointer) conversions, whenever the pointer/integer is nonnull/nonzero
 * representation of signed integers (two's complement, one's complement, etc.)
 * the extent to which the compiler respects the inline function specifier
-* ... and many more ... (J.3)
+* ... and many more (J.3)
 
 ### Unspecified Behavior 
 
@@ -34,7 +34,7 @@ All of the following are unspecified:
 
 * the order in which subexpressions are evaluated (and the order in which any resulting side-effects occur) in function calls, evaluation of `&&`, `||`, `?:`, and comma operators
 * the order in which `#` and `##` operations are evaluated during preprocessing
-* ... and many more ... (J.1)
+* ... and many more (J.1)
 
 ### Integer-Pointer Conversion
 
