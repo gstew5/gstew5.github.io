@@ -5,7 +5,7 @@ tags: C semantics
 published: true
 ---
 
-I've become interested recently in how we should think (and reason) about C programs that perform implementation-defined operations, in particular, conversions between nonnull pointers and integers. 
+I've become interested recently in how we should think about C programs that perform implementation-defined operations, in particular, conversions between nonnull pointers and integers. 
 
 Mostly, this is just idle curiosity on my part. 
 
