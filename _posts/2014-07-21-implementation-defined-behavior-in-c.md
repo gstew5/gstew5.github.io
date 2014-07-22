@@ -62,7 +62,7 @@ return ((uintptr_t)(void*)x <= 0xbffff980)
 ```
 
 The first cast to `void*` is always well-defined.
-The comparison checks whether the address `x` (when viewed as an unsigned integer) less than or equal to a particular integer constant. `uintptr_t` is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.
+The comparison checks whether the address `x` (when viewed as an unsigned integer) is less than or equal to a particular integer constant. `uintptr_t` is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.
 
 Let's assume for a moment that we're trying to determine the result without reference to any particular compiler. This is actually a very reasonable thing to do---many C verification and bugfinding tools don't assume a particular compiler, for example.
 
@@ -103,8 +103,9 @@ echo $?
 ```
 
 What's going on?
-In the second compilation, gcc inlines function f at f's callsite in main. Inlining, in turn, changes the absolute position on the stack at which local variable a is allocated, which causes the less-than-or-equal comparison to switch from 1 to 0. 
-(To see this behavior on your own platform, you'll probably have to choose the integer 0xbffff980 a bit craftily, and turn address-space randomization off.)
+
+In the second compilation, gcc inlines function `f` at `f`'s callsite in main. Inlining, in turn, changes the absolute position on the stack at which local variable `a` is allocated, which causes the less-than-or-equal comparison to switch from `1` to `0`. 
+(To see this behavior on your own platform, you'll probably have to choose the integer `0xbffff980` a bit craftily, and turn address-space randomization off.)
 
 Here we've uncovered a second source of unspecified, or nondeterministic, behavior in the program above. Although the cast is now guaranteed to produce a well-defined result, there's no reason we should assume that variable a is allocated at any particular location in memory. The C standard guarantees that the address of an object remains constant only during the _lifetime_ of the object, not across program executions (6.2.4, footnote 33).
 
