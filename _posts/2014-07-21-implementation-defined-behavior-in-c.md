@@ -31,7 +31,6 @@ Here are some examples:
 
 All of the following are unspecified:
 * the order in which subexpressions are evaluated (and the order in which any resulting side-effects occur) in function calls, evaluation of `&&`, `||`, `?:`, and comma operators
-* the order in which `#` and `##` operations are evaluated during preprocessing
 * ... and many more ... (J.1)
 
 ### Integer-Pointer Conversion
