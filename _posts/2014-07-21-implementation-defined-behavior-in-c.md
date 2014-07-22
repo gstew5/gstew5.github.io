@@ -30,8 +30,8 @@ Here are some examples:
 "Unspecified behavior" (3.4.4), in turn, is behavior that either has two or more possible well-specified outcomes, or involves the use of an "unspecified value," which is any valid value of the relevant type (int, float, etc.). 
 
 All of the following are unspecified:
-* the order in which subexpressions are evaluated (and the order in which any resulting side-effects occur) in function calls, evaluation of &&, ||, ?:, and comma operators
-* the order in which # and ## operations are evaluated during preprocessing
+* the order in which subexpressions are evaluated (and the order in which any resulting side-effects occur) in function calls, evaluation of `&&`, `||`, `?:`, and comma operators
+* the order in which `#` and `##` operations are evaluated during preprocessing
 * ... and many more ... (J.1)
 
 ### Integer-Pointer Conversion
