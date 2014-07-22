@@ -123,7 +123,9 @@ ERROR: Undefined behavior
 
 The ERROR: Undefined behavior indicates that the CompCert C semantics got stuck when attempting to execute the pointer->integer (uintptr_t)x cast in g:
 
-> return ((uintptr_t)(void*)x <= 0xbffff980);
+``` C
+return ((uintptr_t)(void*)x <= 0xbffff980);
+```
 
 If you read the CompCert C semantics, you see that the cast to uintptr_t leaves the pointer a pointer (it's classified as a "neutral cast" by CompCert). The comparison, between the pointer and integer, then gets stuck.
 
