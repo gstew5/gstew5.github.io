@@ -66,14 +66,14 @@ return ((uintptr_t)(void*)x <= 0xbffff980);
 {% endraw %}
 
 The first cast to `void*` is always well-defined.
-The conversion `(uintptr_t)x`, on the other hand, is only implementation defined. Quoting from the standard again, "The operation has unspecified behavior, where each implementation documents how the choice is made." 
+The conversion `(uintptr_t)x`, on the other hand, is only implementation defined, i.e., "[...] has unspecified behavior, where each implementation documents how the choice is made." 
 (`uintptr_t` is an unsigned integer type guaranteed not to screw up the integer-pointer conversion.)
 
 Let's assume for a moment that we're trying to determine the result without reference to any particular compiler (C verification and bugfinding tools do this all the time).
 
-The result of the conversion must just be unspecified, right? 
+The result of the conversion must just be unspecified, right? We don't have an implementation to "document how the choice is made."
 
-Which means that `(uintptr_t)x` is a well-defined but arbitrary valid unsigned integer (that is, any unsigned integer representable as a `uintptr_t`). All we can say, then, about the less-than-or-equal-to comparison is that it is either 0 or 1, but we don't know which. The program is nondeterministic.
+Which means that `(uintptr_t)x` is an "unspecified value" of unsigned integer type (that is, any unsigned integer representable as a `uintptr_t`). All we can say, then, about the less-than-or-equal-to comparison is that it is either 0 or 1, but we don't know which. The program is nondeterministic.
 
 Another way to think about this is: If we want to treat the code as truly portable, and, e.g., verify its result once and for all for __all__ implementations, we need to consider all possible implementations of implementation-defined operations such as pointer-to-integer casts.
 
